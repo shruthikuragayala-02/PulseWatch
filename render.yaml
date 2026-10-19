@@ -1,3 +1,7 @@
+databases:
+  - name: pulsewatch-db
+    plan: free
+    region: oregon
 
 services:
   - type: web
@@ -5,27 +9,37 @@ services:
     runtime: docker
     repo: https://github.com/shruthikuragayala-02/PulseWatch
     branch: main
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
+    rootDir: .
     envVars:
-      - key: SPRING_DATASOURCE_URL
+      - key: DB_HOST
         fromDatabase:
           name: pulsewatch-db
-          property: connectionString
-      - key: SPRING_DATASOURCE_USERNAME
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: pulsewatch-db
+          property: port
+      - key: DB_USER
         fromDatabase:
           name: pulsewatch-db
           property: user
-      - key: SPRING_DATASOURCE_PASSWORD
+      - key: DB_PASSWORD
         fromDatabase:
           name: pulsewatch-db
           property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: pulsewatch-db
+          property: database
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRATION
-        value: "86400000"
-      - key: pulsewatch.cors.allowed-origins
-        value: "https://pulsewatch-frontend-fpex.onrender.com"
+        value: 86400000
+      - key: PULSEWATCH_CORS_ALLOWED_ORIGINS
+        fromService:
+          name: pulsewatch-frontend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
     healthCheckPath: /actuator/health
     autoDeploy: false
 
@@ -43,11 +57,8 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_BASE_URL
-        value: https://pulsewatch-backend.onrender.com
+        fromService:
+          name: pulsewatch-backend
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
     autoDeploy: false
-
-databases:
-  - name: pulsewatch-db
-    databaseName: pulsewatch
-    user: pulsewatch
-    plan: starter

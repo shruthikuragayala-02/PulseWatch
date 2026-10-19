@@ -1,0 +1,39 @@
+# Git
+.git/
+.gitignore
+
+# Build outputs / caches
+target/
+*.jar
+*.class
+*.log
+.mvn/
+mvn-temp.zip
+apache-maven-3.9.9/
+
+# Node / Vite
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation / config not needed for the image
+README.md
+docker-compose.yml
+docker-compose.dev.yml
