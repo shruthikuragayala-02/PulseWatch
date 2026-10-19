@@ -204,7 +204,7 @@ export function MonitorsPage() {
         onCancel={() => setDeleteConfirm(null)}
         confirmText="Delete"
         cancelText="Cancel"
-        confirmVariant="destructive"
+        confirmVariant="danger"
       />
     </div>
   );

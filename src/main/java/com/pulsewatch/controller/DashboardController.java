@@ -12,7 +12,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -82,19 +84,32 @@ public class DashboardController {
             failures = healthCheckRepository.findRecentFailuresByUserId(userId, PageRequest.of(0, RECENT_FAILURES_LIMIT));
         }
 
+        // Enrich failures with monitor name and URL for the dashboard table
+        Map<Long, com.pulsewatch.entity.Monitor> monitorsById = new HashMap<>();
+        if (isAdmin) {
+            monitorRepository.findAll().forEach(m -> monitorsById.put(m.getId(), m));
+        } else {
+            monitorRepository.findByUserId(userId).forEach(m -> monitorsById.put(m.getId(), m));
+        }
+
         List<DashboardDTOs.RecentFailedCheck> result = failures.stream()
-            .map(this::toRecentFailedCheck)
+            .map(check -> toRecentFailedCheck(check, monitorsById))
             .collect(Collectors.toList());
 
         return ResponseEntity.ok(result);
     }
 
-    private DashboardDTOs.RecentFailedCheck toRecentFailedCheck(HealthCheck check) {
+    private DashboardDTOs.RecentFailedCheck toRecentFailedCheck(HealthCheck check,
+                                                                Map<Long, com.pulsewatch.entity.Monitor> monitorsById) {
         DashboardDTOs.RecentFailedCheck dto = new DashboardDTOs.RecentFailedCheck();
         dto.setMonitorId(check.getMonitorId());
         dto.setCheckedAt(check.getCheckedAt());
         dto.setFailureReason(check.getFailureReason());
-        // Monitor name and URL would require a join; fetch lazily if needed
+        com.pulsewatch.entity.Monitor monitor = monitorsById.get(check.getMonitorId());
+        if (monitor != null) {
+            dto.setMonitorName(monitor.getName());
+            dto.setMonitorUrl(monitor.getUrl());
+        }
         return dto;
     }
 }

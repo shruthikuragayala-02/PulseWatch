@@ -169,6 +169,7 @@ class DashboardControllerTest {
 
         when(userContextService.getCurrentUserId()).thenReturn(100L);
         when(userContextService.isCurrentUserAdmin()).thenReturn(false);
+        when(monitorRepository.findByUserId(100L)).thenReturn(java.util.Collections.emptyList());
         when(healthCheckRepository.findRecentFailuresByUserId(anyLong(), any()))
             .thenReturn(failures);
 

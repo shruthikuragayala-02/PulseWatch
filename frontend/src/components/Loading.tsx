@@ -11,13 +11,30 @@ export function LoadingSpinner({ className = "", size = "md" }: LoadingSpinnerPr
   };
 
   return (
-    <div className={`flex items-center justify-center ${className}`}>
+    <div className={cnWrapper("flex items-center justify-center", className)}>
       <div
-        className={`animate-spin rounded-full ${sizes[size]} border-b-2 border-blue-600`}
+        className={cnWrapper("animate-spin rounded-full border-b-2 border-[var(--pw-accent)] text-[var(--pw-accent)]", sizes[size])}
         role="status"
       >
         <span className="sr-only">Loading...</span>
       </div>
+    </div>
+  );
+}
+
+function cnWrapper(...classes: (string | undefined | null | false)[]): string {
+  return classes.filter(Boolean).join(" ");
+}
+
+interface PageLoaderProps {
+  className?: string;
+}
+
+export function PageLoader({ className = "" }: PageLoaderProps) {
+  return (
+    <div className={cnWrapper("flex flex-col items-center justify-center gap-3 py-20", className)} role="status" aria-label="Loading">
+      <LoadingSpinner size="lg" />
+      <p className="text-sm text-[var(--pw-text-muted)]">Loading...</p>
     </div>
   );
 }
@@ -31,8 +48,10 @@ interface LoadingSkeletonProps {
 export function LoadingSkeleton({ className = "", width = "100%", height = "1rem" }: LoadingSkeletonProps) {
   return (
     <div
-      className={`animate-pulse bg-gray-200 rounded ${className}`}
+      className={cnWrapper("animate-pulse bg-[var(--pw-border)] rounded-[var(--pw-radius-sm)]", className)}
       style={{ width, height }}
+      role="status"
+      aria-label="Loading"
     />
   );
 }

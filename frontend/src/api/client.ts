@@ -3,18 +3,58 @@ import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import type { AuthResponse } from "../types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const TOKEN_STORAGE_KEY = "pwwatch_token";
+const USER_STORAGE_KEY = "pwwatch_user";
 
-const TOKEN_STORAGE_KEY = "pulsewatch_token";
+export class ApiError extends Error {
+  status: number;
+  fields: Record<string, string>;
+
+  constructor(message: string, status: number, fields: Record<string, string> = {}) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.fields = fields;
+  }
+}
+
+function extractMessage(error: any): string {
+  if (error?.response?.data) {
+    const data = error.response.data;
+    if (typeof data === "string") return data;
+    if (data.error) return data.error;
+    if (data.message) return data.message;
+    // Field-level validation errors (Map<String,String> from backend)
+    const entries = Object.entries(data);
+    if (entries.length > 0 && entries.every(([, v]) => typeof v === "string")) {
+      return Object.values(data).join(" ");
+    }
+  }
+  if (error?.message) return error.message;
+  return "An unexpected error occurred";
+}
+
+function extractFields(error: any): Record<string, string> {
+  if (error?.response?.data && typeof error.response.data === "object") {
+    const data = error.response.data;
+    if (data.error === undefined && data.message === undefined) {
+      const entries = Object.entries(data);
+      if (entries.length > 0 && entries.every(([, v]) => typeof v === "string")) {
+        return data as Record<string, string>;
+      }
+    }
+  }
+  return {};
+}
 
 export class ApiClient {
   private client: AxiosInstance;
+  private onUnauthenticatedHandler: (() => void) | null = null;
 
   constructor() {
     this.client = axios.create({
       baseURL: API_BASE_URL,
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     });
 
     this.client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -28,13 +68,21 @@ export class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       (error: any) => {
-        if (error.response?.status === 401) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
           localStorage.removeItem(TOKEN_STORAGE_KEY);
-          window.location.href = "/login";
+          localStorage.removeItem(USER_STORAGE_KEY);
+          if (this.onUnauthenticatedHandler) {
+            this.onUnauthenticatedHandler();
+          }
         }
-        return Promise.reject(error);
+        const apiError = new ApiError(extractMessage(error), error.response?.status || 500, extractFields(error));
+        return Promise.reject(apiError);
       }
     );
+  }
+
+  onUnauthenticated(callback: () => void) {
+    this.onUnauthenticatedHandler = callback;
   }
 
   getToken(): string | null {
@@ -45,8 +93,22 @@ export class ApiClient {
     localStorage.setItem(TOKEN_STORAGE_KEY, token);
   }
 
+  setUser(user: AuthResponse): void {
+    localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(user));
+  }
+
+  getUser(): AuthResponse | null {
+    try {
+      const raw = localStorage.getItem(USER_STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  }
+
   clearToken(): void {
     localStorage.removeItem(TOKEN_STORAGE_KEY);
+    localStorage.removeItem(USER_STORAGE_KEY);
   }
 
   isAuthenticated(): boolean {
@@ -64,7 +126,7 @@ export class ApiClient {
   }
 
   async getMonitors() {
-    const response = await this.client.get<[]>(`/api/v1/monitors`);
+    const response = await this.client.get(`/api/v1/monitors`);
     return response.data;
   }
 
@@ -98,6 +160,11 @@ export class ApiClient {
     return response.data;
   }
 
+  async checkNow(id: number) {
+    const response = await this.client.post(`/api/v1/monitors/${id}/check`);
+    return response.data;
+  }
+
   async getHealthChecks(monitorId: number, page = 0, size = 20) {
     const response = await this.client.get(`/api/v1/health-checks/monitor/${monitorId}`, {
       params: { page, size },
@@ -106,7 +173,7 @@ export class ApiClient {
   }
 
   async getIncidents() {
-    const response = await this.client.get<[]>(`/api/v1/incidents`);
+    const response = await this.client.get(`/api/v1/incidents`);
     return response.data;
   }
 
@@ -122,6 +189,11 @@ export class ApiClient {
 
   async getDashboardSummary() {
     const response = await this.client.get(`/api/v1/dashboard/summary`);
+    return response.data;
+  }
+
+  async getDashboardRecentFailures() {
+    const response = await this.client.get(`/api/v1/dashboard/recent-failures`);
     return response.data;
   }
 }

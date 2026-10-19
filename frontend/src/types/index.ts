@@ -26,7 +26,7 @@ export interface MonitorResponse {
   timeoutMs: number;
   failureThreshold: number;
   enabled: boolean;
-  status: "UP" | "DOWN" | "UNKNOWN";
+  status: "UP" | "DOWN" | "UNKNOWN" | "PAUSED";
   lastCheckedAt: string | null;
   lastStatusCode: number | null;
   lastResponseTimeMs: number | null;
@@ -74,6 +74,14 @@ export interface PaginatedResponse<T> {
   hasPrevious: boolean;
 }
 
+export interface RecentFailedCheck {
+  monitorId: number;
+  monitorName: string | null;
+  monitorUrl: string | null;
+  checkedAt: string;
+  failureReason: string | null;
+}
+
 export interface IncidentResponse {
   id: number;
   monitorId: number;
@@ -102,4 +110,17 @@ export interface DashboardSummary {
   openIncidents: number;
   resolvedIncidents: number;
   uptimePercentage: number;
+}
+
+export interface PaginationParams {
+  page?: number;
+  size?: number;
+}
+
+export interface Toast {
+  id: string;
+  title: string;
+  description?: string;
+  variant: "success" | "error" | "info";
+  duration?: number;
 }

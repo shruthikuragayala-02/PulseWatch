@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, User, ArrowRight } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { ErrorMessage } from "../components/ErrorMessage";
@@ -106,7 +106,9 @@ export function RegisterPage() {
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 font-medium hover:underline">Sign in</a>
+          <Link to="/login" className="text-[var(--pw-accent)] font-medium hover:underline">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>
