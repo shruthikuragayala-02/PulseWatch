@@ -1,95 +1,256 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Monitor, Activity, BarChart3, Zap } from "lucide-react";
+import {
+  ArrowRight,
+  Monitor,
+  Activity,
+  BarChart3,
+  Zap,
+  ShieldCheck,
+} from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 
 export function PublicLandingPage() {
   const features = [
-    { icon: <Monitor size={32} />, title: "Uptime Monitoring", description: "Continuously check your endpoints and APIs." },
-    { icon: <Activity size={32} />, title: "Incident Tracking", description: "Automatically detect and track downtime incidents." },
-    { icon: <BarChart3 size={32} />, title: "Health History", description: "Review response times and check history over time." },
-    { icon: <Zap size={32} />, title: "Instant Alerts", description: "Get notified the moment a monitor goes down." },
+    {
+      icon: <Monitor size={34} />,
+      title: "Uptime Monitoring",
+      description: "Continuously check your endpoints and APIs from multiple locations with configurable intervals.",
+    },
+    {
+      icon: <Activity size={34} />,
+      title: "Incident Tracking",
+      description: "Automatically detect and track downtime incidents with full history and resolution timeline.",
+    },
+    {
+      icon: <BarChart3 size={34} />,
+      title: "Health History",
+      description: "Review response times, status codes, and check history over time with detailed analytics.",
+    },
+    {
+      icon: <Zap size={34} />,
+      title: "Instant Alerts",
+      description: "Get notified the moment a monitor goes down so you can act before your users do.",
+    },
+  ];
+
+  const howItWorks = [
+    {
+      step: "1",
+      title: "Add your endpoint",
+      description: "Enter the URL of any website, API, or service you want to monitor.",
+    },
+    {
+      step: "2",
+      title: "We check continuously",
+      description: "PulseWatch polls your endpoints on your schedule and records every response.",
+    },
+    {
+      step: "3",
+      title: "Get alerted on issues",
+      description: "When a monitor goes down, an incident is created and you're notified immediately.",
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-[var(--pw-bg)] text-[var(--pw-text)]">
-      <nav className="sticky top-0 z-40 border-b border-[var(--pw-border)] bg-[var(--pw-card)]/95 backdrop-blur">
+    <div className="min-h-screen bg-pw-bg text-pw-text selection:bg-pw-accent selection:text-pw-text-inverse">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 border-b border-pw-border/50 bg-pw-bg/80 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[var(--pw-accent)] rounded-[var(--pw-radius-sm)] flex items-center justify-center text-white font-bold text-sm">
+              <div className="w-9 h-9 bg-gradient-to-br from-pw-accent to-cyan-600 rounded-lg flex items-center justify-center text-pw-text-inverse font-bold text-lg shadow-[0_0_20px_rgba(34,211,238,0.4)]">
                 P
               </div>
-              <span className="font-bold text-xl tracking-tight text-[var(--pw-text)]">PulseWatch</span>
+              <span className="font-bold text-xl tracking-tight text-pw-text">PulseWatch</span>
             </div>
-            <div className="flex items-center gap-3">
-              <Link to="/login" className="text-sm font-medium text-[var(--pw-text-muted)] hover:text-[var(--pw-accent)]">
+            <div className="hidden md:flex items-center gap-8">
+              <Link
+                to="/login"
+                className="text-sm font-medium text-pw-text-muted hover:text-pw-accent transition-colors"
+              >
                 Sign in
               </Link>
-              <Button>Get started</Button>
+              <Link to="/register">
+                <Button variant="primary" size="sm">
+                  Get started <ArrowRight size={16} className="ml-1" />
+                </Button>
+              </Link>
+            </div>
+            <div className="flex items-center gap-2 md:hidden">
+              <button className="p-2 text-pw-text-muted hover:text-pw-accent rounded-lg hover:bg-pw-surface transition-colors" aria-label="Menu">
+                <MenuIcon size={20} />
+              </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <section className="py-20 px-4">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-[var(--pw-text)] mb-6 tracking-tight">
-            Production monitoring, simplified.
-          </h1>
-          <p className="text-lg text-[var(--pw-text-muted)] mb-10 max-w-xl mx-auto leading-relaxed">
-            Monitor your websites and APIs, detect incidents fast, and keep your team informed.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/register">
-              <Button>Start free trial</Button>
-            </Link>
-            <Link to="/login" className="px-5 py-2.5 rounded-md border border-[var(--pw-border)] text-[var(--pw-text)] hover:bg-[var(--pw-surface)] transition">
-              Sign in
-            </Link>
+      {/* Hero */}
+      <section className="relative py-24 px-4 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-pw-border/50 bg-pw-surface/50 px-3 py-1.5 text-xs font-medium text-pw-accent">
+                <ShieldCheck size={14} className="mr-1" /> Uptime SLA monitoring
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold text-pw-text tracking-tight leading-tight">
+                Know when your services go down. <span className="text-pw-accent">Before your users do.</span>
+              </h1>
+              <p className="text-lg text-pw-text-muted max-w-xl leading-relaxed">
+                Monitor your websites, APIs, and services with continuous health checks. Get instant incident tracking, response time analytics, and actionable alerts.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/register" className="Button w-auto">
+                  Start free trial <ArrowRight size={18} className="ml-2" />
+                </Link>
+                <Link to="/login" className="Button variant-outline w-auto">
+                  Sign in
+                </Link>
+              </div>
+            </div>
+            <div className="relative">
+              {/* Dashboard preview card */}
+              <div className="relative rounded-xl border border-pw-border bg-pw-card shadow-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2 h-2 rounded-full bg-pw-danger" />
+                  <div className="w-2 h-2 rounded-full bg-pw-warning" />
+                  <div className="w-2 h-2 rounded-full bg-pw-success" />
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-xs text-pw-text-muted">Total Monitors</p>
+                    <p className="text-xl font-bold text-pw-text">24</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-pw-text-muted">Uptime</p>
+                    <p className="text-xl font-bold text-pw-success">99.8%</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-pw-text-muted">Avg Response</p>
+                    <p className="text-xl font-bold text-pw-text">142ms</p>
+                  </div>
+                </div>
+                <div className="mt-6 h-32 rounded-lg border border-pw-border bg-pw-surface overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-2 border-b border-pw-border/50">
+                    <span className="text-xs text-pw-text-muted">api.example.com</span>
+                    <StatusDot status="UP" />
+                  </div>
+                  <div className="flex items-center justify-between px-4 py-2 border-b border-pw-border/50">
+                    <span className="text-xs text-pw-text-muted">web.app.health</span>
+                    <StatusDot status="UP" />
+                  </div>
+                  <div className="flex items-center justify-between px-4 py-2">
+                    <span className="text-xs text-pw-text-muted">staging.api.internal</span>
+                    <StatusDot status="DOWN" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-[var(--pw-surface)] border-y border-[var(--pw-border)]">
+      {/* Features */}
+      <section className="py-24 px-4 border-y border-pw-border/50 bg-pw-surface/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-[var(--pw-text)] mb-10 text-center">Everything you need to stay online</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-pw-text tracking-tight">Everything you need to stay online</h2>
+            <p className="text-pw-text-muted mt-4 max-w-2xl mx-auto">
+              Production-grade monitoring built for teams that care about reliability.
+            </p>
+          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, i) => (
-              <Card key={i} padding="lg" className="text-[var(--pw-text)]">
-                <div className="w-10 h-10 bg-[var(--pw-accent-bg)] text-[var(--pw-accent)] rounded-[var(--pw-radius-sm)] flex items-center justify-center mb-4">
+              <Card key={i} padding="lg" className="hover:border-pw-accent/50 transition-colors">
+                <div className="w-11 h-11 rounded-lg bg-pw-accent-bg/20 text-pw-accent flex items-center justify-center mb-5">
                   {feature.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-[var(--pw-text)] mb-2">{feature.title}</h3>
-                <p className="text-sm text-[var(--pw-text-muted)] leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-pw-text mb-3">{feature.title}</h3>
+                <p className="text-sm text-pw-text-muted leading-relaxed">{feature.description}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-20 px-4">
+      {/* How it works */}
+      <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-[var(--pw-text)] mb-3">Ready to monitor your stack?</h2>
-            <p className="text-[var(--pw-text-muted)]">Join teams that rely on PulseWatch for uptime.</p>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-pw-text tracking-tight">How it works</h2>
+            <p className="text-pw-text-muted mt-4 max-w-2xl mx-auto">
+              Set up monitoring in minutes and gain instant visibility into your infrastructure.
+            </p>
           </div>
-          <div className="max-w-md mx-auto">
-            <Link to="/register" className="w-full Button">
-              <ArrowRight size={18} className="mr-2" /> Create your account
-            </Link>
+          <div className="grid md:grid-cols-3 gap-8">
+            {howItWorks.map((step, i) => (
+              <Card key={i} padding="lg" className="group">
+                <div className="w-10 h-10 rounded-lg border border-pw-border bg-pw-card flex items-center justify-center mb-5 group-hover:border-pw-accent transition-colors">
+                  <span className="text-sm font-bold text-pw-text">{step.step}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-pw-text mb-3">{step.title}</h3>
+                <p className="text-sm text-pw-text-muted leading-relaxed">{step.description}</p>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
 
-      <footer className="border-t border-[var(--pw-border)] py-8 bg-[var(--pw-surface)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <span className="text-sm text-[var(--pw-text-muted)]">© {new Date().getFullYear()} PulseWatch</span>
-          <div className="flex items-center gap-6 text-sm text-[var(--pw-text-muted)]">
-            <Link to="/login" className="hover:text-[var(--pw-accent)] transition">Sign in</Link>
+      {/* CTA */}
+      <section className="py-24 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="relative rounded-xl border border-pw-border bg-gradient-to-br from-pw-card to-pw-surface shadow-xl p-8 md:p-12 overflow-hidden">
+            <div className="absolute inset-0 bg-pw-accent/5 blur-[100px] -z-10" />
+            <h2 className="text-3xl font-bold text-pw-text tracking-tight">Ready to monitor your stack?</h2>
+            <p className="text-pw-text-muted mt-4 max-w-xl mx-auto">
+              Join teams that rely on PulseWatch for uptime, incident tracking, and peace of mind.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-10">
+              <Link to="/register" className="Button w-auto">
+                Create your account <ArrowRight size={18} className="ml-2" />
+              </Link>
+              <Link to="/login" className="Button variant-outline w-auto">
+                Sign in
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-pw-border/50 bg-pw-surface/30 py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-gradient-to-br from-pw-accent to-cyan-600 rounded flex items-center justify-center text-pw-text-inverse font-bold">
+              P
+            </div>
+            <span className="font-bold text-lg tracking-tight text-pw-text">PulseWatch</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm text-pw-text-muted">
+            <Link to="/login" className="hover:text-pw-accent transition-colors">Sign in</Link>
+            <span className="text-pw-text-light">© {new Date().getFullYear()} PulseWatch</span>
           </div>
         </div>
       </footer>
     </div>
+  );
+}
+
+function MenuIcon({ size }: { size?: number }) {
+  return (
+    <svg width={size || 20} height={size || 20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+  );
+}
+
+function StatusDot({ status }: { status: "UP" | "DOWN" }) {
+  return (
+    <span
+      className={`w-2 h-2 rounded-full ${status === "UP" ? "bg-pw-success" : "bg-pw-danger"}`}
+    />
   );
 }

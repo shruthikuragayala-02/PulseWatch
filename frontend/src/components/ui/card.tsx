@@ -14,7 +14,15 @@ export function Card({ className, padding = "md", children, ...props }: CardProp
     lg: "p-8",
   };
   return (
-    <div className={cn("pw-card", paddings[padding], className)} {...props}>
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-xl border border-pw-border bg-pw-card shadow-sm",
+        "hover:border-pw-border-hover transition-colors duration-200",
+        paddings[padding],
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
@@ -34,7 +42,7 @@ interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
 
 export function CardTitle({ className, children, ...props }: CardTitleProps) {
   return (
-    <h3 className={cn("text-lg font-semibold text-[var(--pw-text)] mb-1", className)} {...props}>
+    <h3 className={cn("text-lg font-semibold text-pw-text mb-1 tracking-tight", className)} {...props}>
       {children}
     </h3>
   );
@@ -46,7 +54,7 @@ interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement
 
 export function CardDescription({ className, children, ...props }: CardDescriptionProps) {
   return (
-    <p className={cn("text-sm text-[var(--pw-text-muted)]", className)} {...props}>
+    <p className={cn("text-sm text-pw-text-muted leading-relaxed", className)} {...props}>
       {children}
     </p>
   );
@@ -65,5 +73,9 @@ interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
-  return <div className={cn("mt-4 pt-4 border-t border-[var(--pw-border)]", className)} {...props}>{children}</div>;
+  return (
+    <div className={cn("mt-4 pt-4 border-t border-pw-border", className)} {...props}>
+      {children}
+    </div>
+  );
 }

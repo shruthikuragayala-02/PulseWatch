@@ -5,17 +5,17 @@ interface ErrorMessageProps {
 
 export function ErrorMessage({ message, onDismiss }: ErrorMessageProps) {
   return (
-    <div className="pw-toast pw-toast-error flex items-start gap-3 mb-4" role="alert">
-      <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[var(--pw-danger)] border border-[var(--pw-danger)]">
-        <span className="text-xs font-bold">!</span>
+    <div className="flex items-start gap-3 rounded-lg border border-pw-border bg-pw-danger-bg/10 p-4 mb-4" role="alert">
+      <div className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-pw-danger border border-pw-danger">
+        <span className="text-[0.7rem] font-bold">!</span>
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-[var(--pw-danger)]">{message}</p>
+        <p className="text-sm text-pw-danger">{message}</p>
       </div>
       {onDismiss && (
         <button
           onClick={onDismiss}
-          className="flex-shrink-0 p-1.5 text-[var(--pw-text-light)] hover:text-[var(--pw-danger)] rounded-md transition"
+          className="flex-shrink-0 p-1.5 text-pw-text-light hover:text-pw-danger rounded-md hover:bg-pw-surface transition"
           aria-label="Dismiss"
         >
           <span className="sr-only">Dismiss</span>

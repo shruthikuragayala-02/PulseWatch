@@ -5,7 +5,9 @@ import type { MonitorResponse, HealthCheckResponse } from "../types";
 import { apiClient } from "../api/client";
 import { StatusBadge } from "../components/StatusBadge";
 import { LoadingSpinner } from "../components/Loading";
-import { formatDate, formatRelativeTime, formatResponseTime } from "../utils/helpers";
+import { formatDate, formatRelativeTime, formatResponseTime } from "../lib/utils";
+import { Card } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 
 export function MonitorDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -81,11 +83,9 @@ export function MonitorDetailPage() {
   if (error) {
     return (
       <div className="p-8 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
-        <p className="text-red-600 mb-4">{error}</p>
-        <button onClick={() => navigate("/monitors")} className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          Back to Monitors
-        </button>
+        <h1 className="text-2xl font-bold text-pw-text mb-4">Error</h1>
+        <p className="text-pw-danger mb-4">{error}</p>
+        <Button onClick={() => navigate("/monitors")} variant="primary">Back to Monitors</Button>
       </div>
     );
   }
@@ -96,108 +96,101 @@ export function MonitorDetailPage() {
     <div className="p-8">
       <div className="flex justify-between items-start mb-6">
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => navigate("/monitors")}
-            className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition"
-          >
+          <Button variant="ghost" size="sm" onClick={() => navigate("/monitors")}>
             <ArrowLeft size={18} />
-          </button>
+          </Button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{monitor.name}</h1>
-            <p className="text-gray-600 truncate max-w-xs" title={monitor.url}>{monitor.url}</p>
+            <h1 className="text-2xl font-bold text-pw-text">{monitor.name}</h1>
+            <p className="text-pw-text-muted truncate max-w-xs" title={monitor.url}>{monitor.url}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <StatusBadge status={monitor.status} className="mb-0" />
-          <button
+          <Button
+            variant={monitor.enabled ? "outline" : "primary"}
+            size="sm"
             onClick={monitor.enabled ? handlePause : handleResume}
-            className={`px-3 py-1.5 rounded-md text-sm font-medium transition ${
-              monitor.enabled
-                ? "bg-yellow-100 text-yellow-700 hover:bg-yellow-200"
-                : "bg-green-100 text-green-700 hover:bg-green-200"
-            }`}
           >
             {monitor.enabled ? "Pause" : "Resume"}
-          </button>
-          <button
-            onClick={handleDelete}
-            className="p-2 text-red-600 hover:text-red-800 rounded-md hover:bg-red-50 transition"
-            title="Delete"
-          >
+          </Button>
+          <Button variant="ghost" size="sm" onClick={handleDelete}>
             <XCircle size={18} />
-          </button>
+          </Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Status</p>
-          <div className="mt-2">
-            <StatusBadge status={monitor.status} className="text-sm" />
+        <Card>
+          <div className="p-6">
+            <p className="text-sm font-medium text-pw-text-muted uppercase tracking-wider">Status</p>
+            <div className="mt-2">
+              <StatusBadge status={monitor.status} size="md" />
+            </div>
           </div>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Last Response Time</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{formatResponseTime(monitor.lastResponseTimeMs)}</p>
-        </div>
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Last Checked</p>
-          <p className="text-2xl font-bold text-gray-900 mt-2">{formatRelativeTime(monitor.lastCheckedAt)}</p>
-          <p className="text-xs text-gray-500 mt-1">{formatDate(monitor.lastCheckedAt)}</p>
-        </div>
+        </Card>
+        <Card>
+          <div className="p-6">
+            <p className="text-sm font-medium text-pw-text-muted uppercase tracking-wider">Last Response Time</p>
+            <p className="text-2xl font-bold text-pw-text mt-2">{formatResponseTime(monitor.lastResponseTimeMs)}</p>
+          </div>
+        </Card>
+        <Card>
+          <div className="p-6">
+            <p className="text-sm font-medium text-pw-text-muted uppercase tracking-wider">Last Checked</p>
+            <p className="text-2xl font-bold text-pw-text mt-2">{formatRelativeTime(monitor.lastCheckedAt)}</p>
+            <p className="text-xs text-pw-text-muted mt-1">{formatDate(monitor.lastCheckedAt)}</p>
+          </div>
+        </Card>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-900">Health Check History</h2>
-          <button
-            onClick={() => loadChecks()}
-            className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-700 transition"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+      <Card>
+        <div className="p-6 border-b border-pw-border flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-pw-text">Health Check History</h2>
+          <Button variant="ghost" size="sm" onClick={loadChecks}>
+            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             Refresh
-          </button>
+          </Button>
         </div>
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto p-6">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-200 bg-gray-50">
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Result</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status Code</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Response Time</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Failure Reason</th>
+              <tr className="border-b border-pw-border">
+                <th className="px-4 py-3 text-left text-xs font-medium text-pw-text-muted uppercase">Time</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-pw-text-muted uppercase">Result</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-pw-text-muted uppercase">Status Code</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-pw-text-muted uppercase">Response Time</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-pw-text-muted uppercase">Failure Reason</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-pw-border">
               {checks.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={5} className="px-4 py-8 text-center text-pw-text-muted">
                     No health check data yet. Checks run automatically on schedule.
                   </td>
                 </tr>
               ) : (
                 checks.map((check) => (
-                  <tr key={check.id} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                  <tr key={check.id} className="hover:bg-pw-surface/50 transition">
+                    <td className="px-4 py-4 text-sm text-pw-text-muted">
                       {formatRelativeTime(check.checkedAt)}
                     </td>
-                    <td className="px-6 py-4">
-                      <StatusBadge status={check.result} className="text-xs" />
+                    <td className="px-4 py-4">
+                      <StatusBadge status={check.result} size="sm" />
                     </td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-4 py-4 text-sm">
                       {check.statusCode ? (
-                        <span className={`font-medium ${check.statusCode >= 200 && check.statusCode < 400 ? "text-green-600" : "text-red-600"}`}>
+                        <span className={`font-medium ${check.statusCode >= 200 && check.statusCode < 400 ? "text-pw-success" : "text-pw-danger"}`}>
                           {check.statusCode}
                         </span>
                       ) : (
-                        <span className="text-gray-400">-</span>
+                        <span className="text-pw-text-light">-</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">
+                    <td className="px-4 py-4 text-sm text-pw-text-muted">
                       {formatResponseTime(check.responseTimeMs)}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
+                    <td className="px-4 py-4 text-sm text-pw-text-muted">
                       {check.failureReason || "-"}
                     </td>
                   </tr>
@@ -206,7 +199,7 @@ export function MonitorDetailPage() {
             </tbody>
           </table>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

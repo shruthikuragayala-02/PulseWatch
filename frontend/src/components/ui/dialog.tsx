@@ -15,21 +15,26 @@ export function Dialog({ isOpen, onClose, title, description, className, childre
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center" aria-modal="true" role="dialog">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      aria-modal="true"
+      role="dialog"
+    >
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
       <div
         className={cn(
-          "relative bg-[var(--pw-card)] border border-[var(--pw-border)] rounded-[var(--pw-radius)] shadow-lg w-full max-w-lg mx-4 p-6 text-[var(--pw-text)]",
+          "relative bg-pw-card border border-pw-border rounded-xl shadow-lg w-full max-w-lg mx-4 p-6 text-pw-text",
+          "scale-95 opacity-0 animate-[fade-in_scale_0.2s_ease-out_forwards]",
           className
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        {title && <h2 className="text-lg font-semibold text-[var(--pw-text)] mb-2">{title}</h2>}
-        {description && <p className="text-sm text-[var(--pw-text-muted)] mb-6">{description}</p>}
+        {title && <h2 className="text-lg font-semibold text-pw-text mb-1 tracking-tight">{title}</h2>}
+        {description && <p className="text-sm text-pw-text-muted mb-6">{description}</p>}
         <div className="flex justify-end space-x-3">{children}</div>
       </div>
     </div>

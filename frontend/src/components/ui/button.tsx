@@ -18,17 +18,17 @@ export function Button({
   fullWidth = false,
   ...props
 }: ButtonProps) {
-  const base = "pw-btn transition-colors";
+  const base = "inline-flex items-center justify-center gap-2 rounded-md font-medium transition-all duration-200 outline-none disabled:opacity-50 disabled:cursor-not-allowed";
   const variants: Record<string, string> = {
-    primary: "pw-btn-primary",
-    outline: "pw-btn-outline",
-    ghost: "pw-btn-ghost",
-    danger: "pw-btn-danger",
+    primary: "bg-pw-accent text-pw-text-inverse hover:bg-pw-accent-hover hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] shadow-[0_0_15px_rgba(34,211,238,0.15)]",
+    outline: "border border-pw-border bg-pw-card text-pw-text hover:bg-pw-surface hover:border-pw-border-hover",
+    ghost: "text-pw-text-muted hover:text-pw-text hover:bg-pw-surface",
+    danger: "bg-pw-danger text-pw-text-inverse hover:bg-red-600 hover:shadow-[0_0_20px_rgba(248,113,113,0.3)]",
   };
   const sizes: Record<string, string> = {
-    sm: "pw-btn-sm",
-    md: "pw-btn-md",
-    lg: "pw-btn-lg",
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-5 py-3 text-base",
+    lg: "px-8 py-4 text-lg",
   };
 
   return (
@@ -38,7 +38,6 @@ export function Button({
         variants[variant],
         sizes[size],
         fullWidth ? "w-full" : "",
-        disabled ? "opacity-60 cursor-not-allowed" : "",
         className
       )}
       disabled={disabled || isLoading}

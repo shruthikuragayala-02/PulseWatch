@@ -25,7 +25,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    // Auto-remove toasts after their duration
     const timeouts: ReturnType<typeof setTimeout>[] = [];
     toasts.forEach((toast) => {
       if (toast.duration && toast.duration > 0) {
@@ -49,34 +48,41 @@ export function useToast() {
 
 export function Toast({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
   const variants: Record<string, string> = {
-    success: "pw-toast-success",
-    error: "pw-toast-error",
-    info: "pw-toast-info",
+    success: "border-l-3 border-pw-success bg-pw-success-bg/10",
+    error: "border-l-3 border-pw-danger bg-pw-danger-bg/10",
+    info: "border-l-3 border-pw-accent bg-pw-accent-bg/10",
   };
   return (
-    <div className={cn("pw-toast flex items-start gap-3", variants[toast.variant])} role="alert">
-      <div className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border">
+    <div
+      className={cn(
+        "flex items-start gap-3 rounded-lg border border-pw-border bg-pw-card shadow-lg p-4 text-pw-text",
+        "animate-[fade-in_slide_0.3s_ease-out_forwards]",
+        variants[toast.variant]
+      )}
+      role="alert"
+    >
+      <div className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border">
         {toast.variant === "success" ? (
-          <svg className="text-[var(--pw-success)] border-[var(--pw-success)]" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+          <svg className="text-pw-success border-pw-success" fill="none" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" stroke="currentColor" d="M5 13l4 4L19 7"></path>
           </svg>
         ) : toast.variant === "error" ? (
-          <svg className="text-[var(--pw-danger)] border-[var(--pw-danger)]" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+          <svg className="text-pw-danger border-pw-danger" fill="none" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" stroke="currentColor" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         ) : (
-          <svg className="text-[var(--pw-accent)] border-[var(--pw-accent)]" fill="none" viewBox="0 0 24 24" strokeWidth="2">
+          <svg className="text-pw-accent border-pw-accent" fill="none" viewBox="0 0 24 24" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" stroke="currentColor" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
         )}
       </div>
       <div className="flex-1 min-w-0">
-        <h4 className="text-sm font-medium text-[var(--pw-text)]">{toast.title}</h4>
-        {toast.description && <p className="text-sm text-[var(--pw-text-muted)] mt-1">{toast.description}</p>}
+        <h4 className="text-sm font-semibold text-pw-text">{toast.title}</h4>
+        {toast.description && <p className="text-sm text-pw-text-muted mt-1">{toast.description}</p>}
       </div>
       <button
         onClick={() => onRemove(toast.id)}
-        className="flex-shrink-0 p-1 text-[var(--pw-text-light)] hover:text-[var(--pw-text)] rounded-md transition"
+        className="flex-shrink-0 p-1.5 text-pw-text-light hover:text-pw-text rounded-md hover:bg-pw-surface transition"
         aria-label="Dismiss"
       >
         <span className="sr-only">Dismiss</span>
@@ -93,7 +99,7 @@ export function ToastList() {
   return (
     <div className="fixed top-24 right-4 z-50 flex flex-col gap-3 pointer-events-none">
       {toasts.map((toast) => (
-        <div key={toast.id} className="pointer-events-auto w-full max-w-xs w-[400px] animate-in fade-in slide-in-from-right-2 duration-300">
+        <div key={toast.id} className="pointer-events-auto w-full max-w-xs w-[400px]">
           <Toast toast={toast} onRemove={removeToast} />
         </div>
       ))}

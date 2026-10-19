@@ -7,7 +7,7 @@ interface SeparatorProps extends React.HTMLAttributes<HTMLHRElement> {
 export function Separator({ className, ...props }: SeparatorProps) {
   return (
     <hr
-      className="border-t border-[var(--pw-border)] my-6"
+      className="border-t border-pw-border my-6"
       {...props}
     />
   );

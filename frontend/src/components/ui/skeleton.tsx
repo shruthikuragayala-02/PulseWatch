@@ -10,7 +10,7 @@ interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
 export function Skeleton({ className = "", width = "100%", height = "1rem", ...props }: SkeletonProps) {
   return (
     <div
-      className={cn("pw-skeleton", className)}
+      className={cn("animate-pulse rounded-md bg-pw-border", className)}
       style={{ width, height }}
       {...props}
     />

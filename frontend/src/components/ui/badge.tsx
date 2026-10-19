@@ -11,12 +11,18 @@ interface StatusBadgeProps {
 export function StatusBadge({ status, className, size = "sm" }: StatusBadgeProps) {
   const config = getStatusConfig(status);
   const sizes: Record<string, string> = {
-    sm: "text-xs px-2 py-0.5",
-    md: "text-sm px-2.5 py-1",
+    sm: "text-xs px-2.5 py-1",
+    md: "text-sm px-3 py-1.5",
   };
   return (
     <span
-      className={cn("pw-badge inline-flex items-center gap-1.5", config.bg, sizes[size], className)}
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full border",
+        "font-semibold uppercase tracking-tighter",
+        config.bg,
+        sizes[size],
+        className
+      )}
       role="status"
       aria-label={`Status: ${config.label}`}
     >
@@ -34,11 +40,11 @@ interface BadgeProps {
 
 export function Badge({ variant = "default", className, children }: BadgeProps) {
   const variants: Record<string, string> = {
-    default: "bg-[var(--pw-surface)] text-[var(--pw-text-muted)] border border-[var(--pw-border)]",
-    success: "bg-[var(--pw-success-bg)] text-[var(--pw-success)] border border-[var(--pw-success-border)]",
-    warning: "bg-[var(--pw-warning-bg)] text-[var(--pw-warning)] border border-[var(--pw-warning-border)]",
-    danger: "bg-[var(--pw-danger-bg)] text-[var(--pw-danger)] border border-[var(--pw-danger-border)]",
-    secondary: "bg-[var(--pw-card)] text-[var(--pw-text-muted)] border border-[var(--pw-border)]",
+    default: "bg-pw-surface text-pw-text-muted border border-pw-border",
+    success: "bg-pw-success-bg text-pw-success border border-pw-success-border",
+    warning: "bg-pw-warning-bg text-pw-warning border border-pw-warning-border",
+    danger: "bg-pw-danger-bg text-pw-danger border border-pw-danger-border",
+    secondary: "bg-pw-card text-pw-text-muted border border-pw-border",
   };
   return (
     <span className={cn("pw-badge", variants[variant], className)}>{children}</span>

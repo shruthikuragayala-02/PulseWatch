@@ -41,15 +41,16 @@ export function formatDuration(seconds: number | null | undefined): string {
 
 export function formatResponseTime(ms: number | null | undefined): string {
   if (ms === null || ms === undefined) return "N/A";
-  return `${ms} ms`;
+  if (ms >= 1000) return `${(ms / 1000).toFixed(1)}s`;
+  return `${ms}ms`;
 }
 
 export function getStatusConfig(status: string | null | undefined) {
   const config: Record<string, { label: string; bg: string; text: string; border: string; dot: string }> = {
-    UP: { label: "Up", bg: "pw-badge-up", text: "text-[var(--pw-success)]", dot: "bg-[var(--pw-success)]", border: "" },
-    DOWN: { label: "Down", bg: "pw-badge-down", text: "text-[var(--pw-danger)]", dot: "bg-[var(--pw-danger)]", border: "" },
-    UNKNOWN: { label: "Unknown", bg: "pw-badge-unknown", text: "text-[var(--pw-warning)]", dot: "bg-[var(--pw-warning)]", border: "" },
-    PAUSED: { label: "Paused", bg: "pw-badge-paused", text: "text-[var(--pw-text-muted)]", dot: "bg-[var(--pw-text-light)]", border: "" },
+    UP: { label: "Up", bg: "bg-pw-success-bg/20", text: "text-pw-success", dot: "bg-pw-success", border: "border-pw-success-border" },
+    DOWN: { label: "Down", bg: "bg-pw-danger-bg/20", text: "text-pw-danger", dot: "bg-pw-danger", border: "border-pw-danger-border" },
+    UNKNOWN: { label: "Unknown", bg: "bg-pw-warning-bg/20", text: "text-pw-warning", dot: "bg-pw-warning", border: "border-pw-warning-border" },
+    PAUSED: { label: "Paused", bg: "bg-pw-surface", text: "text-pw-text-light", dot: "bg-pw-text-light", border: "border-pw-border" },
   };
   return config[status || "UNKNOWN"] || config.UNKNOWN;
 }

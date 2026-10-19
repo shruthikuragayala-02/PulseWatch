@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import type { UpdateMonitorRequest } from "../types";
 import { apiClient } from "../api/client";
@@ -76,12 +76,12 @@ export function EditMonitorPage() {
   return (
     <div className="p-8 max-w-2xl">
       <div className="flex items-center gap-2 mb-6">
-        <Link to={`/monitors/${monitorId}`} className="p-2 text-[var(--pw-text-muted)] hover:text-[var(--pw-text)] rounded-md hover:bg-[var(--pw-surface)] transition">
+        <Button variant="ghost" size="sm" onClick={() => navigate(`/monitors/${monitorId}`)}>
           <ArrowLeft size={18} />
-        </Link>
+        </Button>
         <div>
-          <h1 className="text-2xl font-bold text-[var(--pw-text)]">Edit Monitor</h1>
-          <p className="text-sm text-[var(--pw-text-muted)]">Update monitoring settings</p>
+          <h1 className="text-2xl font-bold text-pw-text">Edit Monitor</h1>
+          <p className="text-pw-text-muted">Update monitoring settings</p>
         </div>
       </div>
 
@@ -125,8 +125,14 @@ export function EditMonitorPage() {
               />
             </div>
             <div className="mt-6 flex items-center gap-3">
-              <input id="enabled" type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} className="rounded border-[var(--pw-border)] text-[var(--pw-accent)] focus:ring-[var(--pw-accent)]" />
-              <label htmlFor="enabled" className="text-sm text-[var(--pw-text)] font-medium">Monitor enabled</label>
+              <input
+                id="enabled"
+                type="checkbox"
+                checked={enabled}
+                onChange={(e) => setEnabled(e.target.checked)}
+                className="w-5 h-5 rounded border border-pw-border text-pw-accent focus:ring-2 focus:ring-pw-accent ring-offset-0"
+              />
+              <label htmlFor="enabled" className="text-sm text-pw-text font-medium cursor-pointer">Monitor enabled</label>
             </div>
           </div>
         </Card>
@@ -135,7 +141,7 @@ export function EditMonitorPage() {
           <Button variant="outline" type="button" onClick={() => navigate(`/monitors/${monitorId}`)}>
             Cancel
           </Button>
-          <Button type="submit" disabled={saving} className="w-auto">
+          <Button type="submit" disabled={saving}>
             {saving ? <LoadingSpinner size="sm" /> : null}
             Save changes
           </Button>

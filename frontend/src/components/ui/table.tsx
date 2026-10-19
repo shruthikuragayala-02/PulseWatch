@@ -7,8 +7,8 @@ interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
 
 export function Table({ className, children, ...props }: TableProps) {
   return (
-    <div className="overflow-x-auto border border-[var(--pw-border)] rounded-[var(--pw-radius-sm)]">
-      <table className={cn("pw-table", className)} {...props}>
+    <div className={cn("overflow-x-auto border border-pw-border rounded-lg bg-pw-card shadow-sm", className)}>
+      <table className="w-full text-left border-collapse" {...props}>
         {children}
       </table>
     </div>
@@ -44,7 +44,17 @@ interface ThProps extends React.HTMLAttributes<HTMLTableCellElement> {
 }
 
 export function Th({ className, children, ...props }: ThProps) {
-  return <th className={cn(className)} {...props}>{children}</th>;
+  return (
+    <th
+      className={cn(
+        "px-4 py-3 text-left text-xs font-semibold uppercase tracking-tighter text-pw-text-muted border-b border-pw-border bg-pw-surface",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </th>
+  );
 }
 
 interface TdProps extends React.HTMLAttributes<HTMLTableCellElement> {
@@ -52,5 +62,15 @@ interface TdProps extends React.HTMLAttributes<HTMLTableCellElement> {
 }
 
 export function Td({ className, children, ...props }: TdProps) {
-  return <td className={cn(className)} {...props}>{children}</td>;
+  return (
+    <td
+      className={cn(
+        "px-4 py-4 text-sm text-pw-text border-b border-pw-border",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </td>
+  );
 }
