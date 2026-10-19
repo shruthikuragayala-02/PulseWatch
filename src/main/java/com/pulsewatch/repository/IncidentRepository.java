@@ -16,7 +16,7 @@ public interface IncidentRepository extends JpaRepository<Incident, Long> {
     long countByStatus(String status);
     long countByMonitorId(Long monitorId);
     
-    @Query("SELECT i FROM Incident i WHERE i.monitorId = :monitorId AND i.status = 'OPEN'")
+    @Query(value = "SELECT * FROM incidents WHERE monitor_id = :monitorId AND status = 'OPEN' ORDER BY started_at DESC LIMIT 1", nativeQuery = true)
     Optional<Incident> findOpenIncidentByMonitorId(@Param("monitorId") Long monitorId);
     
     @Query("SELECT i FROM Incident i WHERE i.monitorId = :monitorId AND i.status = 'OPEN' AND i.startedAt >= :since")
