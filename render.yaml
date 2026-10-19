@@ -41,7 +41,7 @@ services:
           type: web
           envVarKey: RENDER_EXTERNAL_URL
     healthCheckPath: /actuator/health
-    autoDeploy: false
+    autoDeploy: true
 
   - type: web
     name: pulsewatch-frontend
