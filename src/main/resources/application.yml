@@ -31,7 +31,7 @@ pulsewatch:
     default-interval-minutes: 5
     failure-threshold: 2
   cors:
-    allowed-origins: ${PULSEWATCH_CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
+    allowed-origins: ${PULSEWATCH_CORS_ALLOWED_ORIGINS:https://pulsewatch-frontend-fpex.onrender.com,http://localhost:5173,http://localhost:3000}
 
 logging:
   level:

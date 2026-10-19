@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.Authentication;
 import jakarta.annotation.PostConstruct;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,9 +24,7 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long expiration;
 
-    private byte[] getSigningKey() {
-        return Decoders.BASE64.decode(secretKey);
-    }
+    private byte[] signingKeyBytes;
 
     @PostConstruct
     public void validateSecret() {
@@ -36,12 +35,21 @@ public class JwtTokenProvider {
         try {
             key = Decoders.BASE64.decode(secretKey);
         } catch (Exception e) {
-            throw new IllegalStateException("JWT secret must be base64-encoded");
+            // Some environments (e.g. Render generateValue) produce a raw
+            // alphanumeric secret that is not valid Base64. Fall back to the
+            // raw UTF-8 bytes so the secret still works.
+            key = secretKey.getBytes(StandardCharsets.UTF_8);
         }
         if (key.length < 32) {
             throw new IllegalStateException("JWT secret must be at least 256 bits");
         }
+        this.signingKeyBytes = key;
     }
+
+    private byte[] getSigningKey() {
+        return signingKeyBytes;
+    }
+
     public String generateToken(String username, List<String> roles) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expiration);

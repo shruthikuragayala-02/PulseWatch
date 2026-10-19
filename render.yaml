@@ -37,7 +37,7 @@ services:
         value: 86400000
       - key: PULSEWATCH_CORS_ALLOWED_ORIGINS
         fromService:
-          name: pulsewatch-frontend
+          name: pulsewatch-frontend-fpex
           type: web
           envVarKey: RENDER_EXTERNAL_URL
     healthCheckPath: /actuator/health
