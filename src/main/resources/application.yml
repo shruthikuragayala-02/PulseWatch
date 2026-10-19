@@ -1,0 +1,52 @@
+# PulseWatch Application Configuration
+spring:
+  application:
+    name: pulsewatch
+  datasource:
+    url: jdbc:postgresql://localhost:5432/pulsewatch
+    username: pulsewatch
+    password: ${DB_PASSWORD}
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        use-new-id-generator-mappings: true
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+
+pulsewatch:
+  healthcheck:
+    max-concurrency: 10
+    default-timeout-ms: 5000
+    default-interval-minutes: 5
+    failure-threshold: 2
+
+logging:
+  level:
+    com.pulsewatch: DEBUG
+    org.springframework.security: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  packages-to-scan: com.pulsewatch

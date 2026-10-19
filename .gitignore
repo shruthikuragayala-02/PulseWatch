@@ -1,0 +1,32 @@
+# Java / Maven
+target/
+*.jar
+*.class
+*.log
+.mvn/wrapper/maven-wrapper.jar
+
+# Node / Vite
+node_modules/
+frontend/dist/
+frontend/.vite/
+npm-debug.log*
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven temp
+mvn-temp.zip
+apache-maven-3.9.9/
